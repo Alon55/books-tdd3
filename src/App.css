@@ -13,3 +13,23 @@
 button {
   margin-top: 25px;
 }
+
+.inputs {
+  text-align: start;
+  padding: 0px 20vh;
+}
+
+label {
+  display: block;
+  font-size: medium;
+  margin: 10px;
+}
+
+.specialOffer{
+  background-color: lightgoldenrodyellow;
+  border-radius: 25px;
+  color: black;
+  font-size: small;
+  padding: 0px 20px;
+  margin-bottom: 20px;
+}

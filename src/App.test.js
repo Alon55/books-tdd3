@@ -75,4 +75,21 @@ describe("Book price calculator - Tests", () => {
     expect(totalPrice.innerHTML).toBe('Total price: 185');
   });
 
+  test("Discount information display", async () => {
+    render(<App />)
+
+    const informationTitle = screen.getByTestId('info-title')
+    const information5Percent = screen.getByTestId('info-5%')
+    const information10Percent = screen.getByTestId('info-10%')
+    const information20Percent = screen.getByTestId('info-20%')
+    const information25Percent = screen.getByTestId('info-25%')
+
+    expect(informationTitle.innerHTML).toBe('Our special offers for today:');
+    expect(information5Percent.innerHTML).toBe('Buy 2 different books and get a 5% discount on them');
+    expect(information10Percent.innerHTML).toBe('Buy 3 different books and get a 10% discount on them');
+    expect(information20Percent.innerHTML).toBe('Buy 4 different books and get a 20% discount on them');
+    expect(information25Percent.innerHTML).toBe('Buy 5 different books and get a 25% discount on them');
+
+  });
+
 });
