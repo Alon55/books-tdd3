@@ -13,15 +13,44 @@ function App() {
   const [shoppingCart, setShoppingCart] = useState([]);
 
   useEffect(() => {
-    setShoppingCart([cleanCodeQuantity, cleanCoderQuantity, cleanArchitectureQuantity, tddQuantity, legacyCodeQuantity].filter((quantity) => { return quantity === 1 }))
+    setShoppingCart([
+      ...Array(cleanCodeQuantity).fill('cleanCode'),
+      ...Array(cleanCoderQuantity).fill('cleanCoder'),
+      ...Array(cleanArchitectureQuantity).fill('cleanArchitecture'),
+      ...Array(tddQuantity).fill('tdd'),
+      ...Array(legacyCodeQuantity).fill('legacyCode')
+    ])
   }, [cleanCodeQuantity, cleanCoderQuantity, cleanArchitectureQuantity, tddQuantity, legacyCodeQuantity])
 
+  const seperateBooksToGroupOfSets = () => {
+    const groupsOfBooks = []
+    while (!shoppingCart.every(book => !book)) {
+      const groupOfBooks = []
+      shoppingCart.forEach((book, index) => {
+        if (!groupOfBooks.includes(book) && book) {
+          groupOfBooks.push(book)
+          shoppingCart[index] = false
+        }
+      });
+      groupsOfBooks.push(groupOfBooks)
+    }
+    return groupsOfBooks
+  }
+
   const calculateBooksPrice = () => {
-    if (shoppingCart.length === FIVE) { setTotalPrice(FIVE * BOOK_PRICE * TWENTY_FIVE_PERCENT) }
-    else if (shoppingCart.length === FOUR) { setTotalPrice(FOUR * BOOK_PRICE * TWENTY_PERCENT) }
-    else if (shoppingCart.length === THREE) { setTotalPrice(THREE * BOOK_PRICE * TEN_PERCENT) }
-    else if (shoppingCart.length === TWO) { setTotalPrice(TWO * BOOK_PRICE * FIVE_PERCENT) }
-    else if (shoppingCart.length === ONE) { setTotalPrice(BOOK_PRICE) }
+
+    let totalPrice = ZERO
+    const setsOfBooks = seperateBooksToGroupOfSets()
+
+    setsOfBooks.forEach((setOfBook) => {
+      if (setOfBook.length === FIVE) { totalPrice += FIVE * BOOK_PRICE * TWENTY_FIVE_PERCENT }
+      else if (setOfBook.length === FOUR) { totalPrice += FOUR * BOOK_PRICE * TWENTY_PERCENT }
+      else if (setOfBook.length === THREE) { totalPrice += THREE * BOOK_PRICE * TEN_PERCENT }
+      else if (setOfBook.length === TWO) { totalPrice += TWO * BOOK_PRICE * FIVE_PERCENT }
+      else if (setOfBook.length === ONE) { totalPrice += BOOK_PRICE }
+
+    })
+    setTotalPrice(totalPrice)
   }
 
   return (
