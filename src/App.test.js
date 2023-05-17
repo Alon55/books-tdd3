@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 import { ONE, THREE, FOUR } from './constants'
 
-
 describe("Book price calculator - Tests", () => {
 
   test('Display title', () => {
@@ -10,6 +9,7 @@ describe("Book price calculator - Tests", () => {
     const title = screen.getByRole('heading', { level: THREE });
     expect(title.innerHTML).toBe('Book price calculator - TDD');
   });
+
 
   test("1 book - without discount", async () => {
     render(<App />)
@@ -22,6 +22,21 @@ describe("Book price calculator - Tests", () => {
 
     const totalPrice = screen.getByRole('heading', { level: FOUR });
     expect(totalPrice.innerHTML).toBe('Total price: 50');
+  });
+
+  test("2 different books - 5% discount", async () => {
+    render(<App />)
+
+    const inputCleanCode = screen.getByLabelText('Clean Code')
+    fireEvent.change(inputCleanCode, { target: { value: ONE } })
+    const inputTheCleanCoder = screen.getByLabelText('The Clean Coder')
+    fireEvent.change(inputTheCleanCoder, { target: { value: ONE } })
+
+    const calculatePrice = screen.getByRole('button', { name: /Calculate Total Price/i });
+    fireEvent.click(calculatePrice)
+
+    const totalPrice = screen.getByRole('heading', { level: FOUR });
+    expect(totalPrice.innerHTML).toBe('Total price: 95');
   });
 
 });
