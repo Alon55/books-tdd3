@@ -6,3 +6,4 @@ export const FOUR = 4
 export const BOOK_PRICE = 50
 export const FIVE_PERCENT = 0.95
 export const TEN_PERCENT = 0.9
+export const TWENTY_PERCENT = 0.8
