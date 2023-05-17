@@ -2,6 +2,17 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 import { ONE, THREE, FOUR } from './constants'
 
+const addBooksAndCalculatePrice = (orderedBooks) => {
+
+  orderedBooks.forEach(book => {
+    const input = screen.getByLabelText(book.title)
+    fireEvent.change(input, { target: { value: book.quantity } })
+  });
+
+  const calculatePrice = screen.getByRole('button', { name: /Calculate Total Price/i });
+  fireEvent.click(calculatePrice)
+}
+
 describe("Book price calculator - Tests", () => {
 
   test('Display title', () => {
@@ -10,15 +21,10 @@ describe("Book price calculator - Tests", () => {
     expect(title.innerHTML).toBe('Book price calculator - TDD');
   });
 
-
   test("1 book - without discount", async () => {
     render(<App />)
 
-    const input = screen.getByLabelText('Clean Code')
-    fireEvent.change(input, { target: { value: ONE } })
-
-    const calculatePrice = screen.getByRole('button', { name: /Calculate Total Price/i });
-    fireEvent.click(calculatePrice)
+    addBooksAndCalculatePrice([{ title: 'Clean Code', quantity: ONE }])
 
     const totalPrice = screen.getByRole('heading', { level: FOUR });
     expect(totalPrice.innerHTML).toBe('Total price: 50');
@@ -27,13 +33,7 @@ describe("Book price calculator - Tests", () => {
   test("2 different books - 5% discount", async () => {
     render(<App />)
 
-    const inputCleanCode = screen.getByLabelText('Clean Code')
-    fireEvent.change(inputCleanCode, { target: { value: ONE } })
-    const inputTheCleanCoder = screen.getByLabelText('The Clean Coder')
-    fireEvent.change(inputTheCleanCoder, { target: { value: ONE } })
-
-    const calculatePrice = screen.getByRole('button', { name: /Calculate Total Price/i });
-    fireEvent.click(calculatePrice)
+    addBooksAndCalculatePrice([{ title: 'Clean Code', quantity: ONE }, { title: 'The Clean Coder', quantity: ONE }])
 
     const totalPrice = screen.getByRole('heading', { level: FOUR });
     expect(totalPrice.innerHTML).toBe('Total price: 95');
